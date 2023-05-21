@@ -303,6 +303,9 @@ class AndroidWebViewController extends PlatformWebViewController {
   Future<void> reload() => _webView.reload();
 
   @override
+  Future<void> stopLoading() => _webView.stopLoading();
+
+  @override
   Future<void> clearCache() => _webView.clearCache(true);
 
   @override
@@ -405,6 +408,10 @@ class AndroidWebViewController extends PlatformWebViewController {
   @override
   Future<void> setUserAgent(String? userAgent) =>
       _webView.settings.setUserAgentString(userAgent);
+
+  @override
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) =>
+      _webView.setContentBlockDomains(contentBlockDomains);
 
   /// Sets the restrictions that apply on automatic media playback.
   Future<void> setMediaPlaybackRequiresUserGesture(bool require) {

@@ -994,6 +994,11 @@ class WKWebViewHostApiImpl extends WKWebViewHostApi {
     return reload(instanceManager.getIdentifier(instance)!);
   }
 
+  /// Calls [stopLoading] with the ids of the provided object instances.
+  Future<void> stopLoadingForInstances(WKWebView instance) {
+    return stopLoading(instanceManager.getIdentifier(instance)!);
+  }
+
   /// Calls [getUrl] with the ids of the provided object instances.
   Future<String?> getUrlForInstances(WKWebView instance) {
     return getUrl(instanceManager.getIdentifier(instance)!);
@@ -1075,6 +1080,17 @@ class WKWebViewHostApiImpl extends WKWebViewHostApi {
     return setUIDelegate(
       instanceManager.getIdentifier(instance)!,
       delegate != null ? instanceManager.getIdentifier(delegate)! : null,
+    );
+  }
+
+  /// Calls [setContentBlockDomains] with the ids of the provided object instances.
+  Future<void> setContentBlockDomainsForInstances(
+    WKWebView instance,
+    List<String> contentBlockDomains,
+  ) {
+    return setContentBlockDomains(
+      instanceManager.getIdentifier(instance)!,
+      contentBlockDomains,
     );
   }
 }

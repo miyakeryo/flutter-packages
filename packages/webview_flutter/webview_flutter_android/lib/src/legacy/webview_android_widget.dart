@@ -362,6 +362,9 @@ class WebViewAndroidPlatformController extends WebViewPlatformController {
   Future<void> reload() => webView.reload();
 
   @override
+  Future<void> stopLoading() => webView.stopLoading();
+
+  @override
   Future<void> clearCache() {
     webView.clearCache(true);
     return webStorage.deleteAllData();
@@ -470,6 +473,11 @@ class WebViewAndroidPlatformController extends WebViewPlatformController {
     final Color? backgroundColor = creationParams.backgroundColor;
     if (backgroundColor != null) {
       webView.setBackgroundColor(backgroundColor);
+    }
+
+    final List<String> contentBlockDomains = creationParams.contentBlockDomains;
+    if (contentBlockDomains.isNotEmpty) {
+      webView.setContentBlockDomains(contentBlockDomains);
     }
 
     addJavascriptChannels(creationParams.javascriptChannelNames);

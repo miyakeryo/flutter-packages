@@ -284,6 +284,12 @@ public class WebViewHostApiImpl implements WebViewHostApi {
   }
 
   @Override
+  public void stopLoading(@NonNull Long instanceId) {
+    final WebView webView = Objects.requireNonNull(instanceManager.getInstance(instanceId));
+    webView.stopLoading();
+  }
+
+  @Override
   public void clearCache(@NonNull Long instanceId, @NonNull Boolean includeDiskFiles) {
     final WebView webView = Objects.requireNonNull(instanceManager.getInstance(instanceId));
     webView.clearCache(includeDiskFiles);

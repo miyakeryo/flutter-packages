@@ -7,16 +7,20 @@ package io.flutter.plugins.webviewflutter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.view.KeyEvent;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.webkit.WebResourceErrorCompat;
 import androidx.webkit.WebViewClientCompat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -34,6 +38,7 @@ public class WebViewClientHostApiImpl implements GeneratedAndroidWebView.WebView
   public static class WebViewClientImpl extends WebViewClient {
     private final WebViewClientFlutterApiImpl flutterApi;
     private boolean returnValueForShouldOverrideUrlLoading = false;
+    private final List<String> contentBlockDomains = new ArrayList<String>();
 
     /**
      * Creates a {@link WebViewClient} that passes arguments of callbacks methods to Dart.
@@ -85,6 +90,9 @@ public class WebViewClientHostApiImpl implements GeneratedAndroidWebView.WebView
     @SuppressWarnings("deprecation")
     @Override
     public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull String url) {
+      if (shouldBlock(url)) {
+        return true;
+      }
       flutterApi.urlLoading(this, view, url, reply -> {});
       return returnValueForShouldOverrideUrlLoading;
     }
@@ -100,6 +108,34 @@ public class WebViewClientHostApiImpl implements GeneratedAndroidWebView.WebView
       // Deliberately empty. Occasionally the webview will mark events as having failed to be
       // handled even though they were handled. We don't want to propagate those as they're not
       // truly lost.
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+      if (shouldBlock(url)) {
+        return new WebResourceResponse("text/javascript", "UTF-8", null);
+      } else {
+        return super.shouldInterceptRequest(view, url);
+      }
+    }
+
+    public void setContentBlockDomains(List<String> domains) {
+      contentBlockDomains.clear();
+      contentBlockDomains.addAll(domains);
+    }
+
+    private boolean shouldBlock(String url) {
+      if (contentBlockDomains != null) {
+        Uri uri = Uri.parse(url);
+        String host = uri.getHost();
+        for (String domain : contentBlockDomains) {
+          if (host.endsWith(domain)) {
+            return true;
+          }
+        }
+      }
+      return false;
     }
 
     /** Sets return value for {@link #shouldOverrideUrlLoading}. */
@@ -250,6 +286,16 @@ public class WebViewClientHostApiImpl implements GeneratedAndroidWebView.WebView
     } else {
       throw new IllegalStateException(
           "This WebViewClient doesn't support setting the returnValueForShouldOverrideUrlLoading.");
+    }
+  }
+
+  @Override
+  public void setContentBlockDomains(
+      @NonNull Long instanceId, @NonNull List<String> domains) {
+    final WebViewClient webViewClient =
+        Objects.requireNonNull(instanceManager.getInstance(instanceId));
+    if (webViewClient instanceof WebViewClientImpl) {
+      ((WebViewClientImpl) webViewClient).setContentBlockDomains(domains);
     }
   }
 }

@@ -2356,6 +2356,27 @@ void FWFWKWebViewHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger,
   }
   {
     FlutterBasicMessageChannel *channel = [[FlutterBasicMessageChannel alloc]
+           initWithName:@"dev.flutter.pigeon.WKWebViewHostApi.stopLoading"
+        binaryMessenger:binaryMessenger
+                  codec:FWFWKWebViewHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(stopLoadingWebViewWithIdentifier:error:)],
+                @"FWFWKWebViewHostApi api (%@) doesn't respond to "
+                @"@selector(stopLoadingWebViewWithIdentifier:error:)",
+                api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSNumber *arg_identifier = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api stopLoadingWebViewWithIdentifier:arg_identifier error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel = [[FlutterBasicMessageChannel alloc]
            initWithName:@"dev.flutter.pigeon.WKWebViewHostApi.getTitle"
         binaryMessenger:binaryMessenger
                   codec:FWFWKWebViewHostApiGetCodec()];
@@ -2420,6 +2441,31 @@ void FWFWKWebViewHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger,
         [api setUserAgentForWebViewWithIdentifier:arg_identifier
                                         userAgent:arg_userAgent
                                             error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel = [[FlutterBasicMessageChannel alloc]
+           initWithName:@"dev.flutter.pigeon.WKWebViewHostApi.setContentBlockDomains"
+        binaryMessenger:binaryMessenger
+                  codec:FWFWKWebViewHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setContentBlockDomainsForWebViewWithIdentifier:
+                                                                             contentBlockDomains:error:)],
+                @"FWFWKWebViewHostApi api (%@) doesn't respond to "
+                @"@selector(setContentBlockDomainsForWebViewWithIdentifier:contentBlockDomains:error:)",
+                api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSNumber *arg_identifier = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_contentBlockDomains = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api setContentBlockDomainsForWebViewWithIdentifier:arg_identifier
+                                        contentBlockDomains:arg_contentBlockDomains
+                                                      error:&error];
         callback(wrapResult(nil, error));
       }];
     } else {

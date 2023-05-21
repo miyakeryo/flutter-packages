@@ -197,6 +197,40 @@
        }];
 }
 
+/// [Creating a content blocker](https://developer.apple.com/documentation/safariservices/creating_a_content_blocker)
+- (void)setContentBlockDomainsForWebViewWithIdentifier:(nonnull NSNumber *)identifier
+                                   contentBlockDomains:(nonnull NSArray *)contentBlockDomains
+                                                 error:(FlutterError *_Nullable *_Nonnull)error {
+  NSMutableArray* contentBlockFilters = [NSMutableArray array];
+  [contentBlockDomains enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger i, BOOL *stop) {
+      NSString *domain = [obj stringByReplacingOccurrencesOfString:@"." withString:@"\\."];
+      [contentBlockFilters addObject:@{
+        @"trigger": @{@"url-filter": [NSString stringWithFormat:@".*%@.*", domain]},
+        @"action": @{@"type": @"block"}
+      }];
+  }];
+  NSData *data = [NSJSONSerialization dataWithJSONObject: contentBlockFilters options:0 error:nil];
+  NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  [WKContentRuleListStore.defaultStore compileContentRuleListForIdentifier:@"contentBlockDomains"
+                                                    encodedContentRuleList:json
+                                                          completionHandler:
+    ^(WKContentRuleList *contentRuleList, NSError *error) {
+      if (error != nil) {
+        NSLog(@"Cannot set ContentBlockDomains.");
+        error = [FlutterError errorWithCode:@"FWFSetContentBlockDomainsError"
+                                    message:@"Failed setting ContentBlockDomains."
+                                    details:FWFNSErrorDataFromNativeNSError(error)];
+        return;
+      }
+      if (contentRuleList) {
+        FWFWebView *webView = [self webViewForIdentifier:identifier];
+        [webView.configuration.userContentController addContentRuleList: contentRuleList];
+        [webView reload];
+      }
+    }
+  ];
+}
+
 - (void)goBackForWebViewWithIdentifier:(nonnull NSNumber *)identifier
                                  error:(FlutterError *_Nullable __autoreleasing *_Nonnull)error {
   [[self webViewForIdentifier:identifier] goBack];
@@ -250,6 +284,11 @@
 - (void)reloadWebViewWithIdentifier:(nonnull NSNumber *)identifier
                               error:(FlutterError *_Nullable __autoreleasing *_Nonnull)error {
   [[self webViewForIdentifier:identifier] reload];
+}
+
+- (void)stopLoadingWebViewWithIdentifier:(nonnull NSNumber *)identifier
+                                   error:(FlutterError *_Nullable __autoreleasing *_Nonnull)error {
+  [[self webViewForIdentifier:identifier] stopLoading];
 }
 
 - (void)

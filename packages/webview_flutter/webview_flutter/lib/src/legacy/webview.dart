@@ -98,6 +98,7 @@ class WebView extends StatefulWidget {
         AutoMediaPlaybackPolicy.require_user_action_for_all_media_types,
     this.allowsInlineMediaPlayback = false,
     this.backgroundColor,
+    this.contentBlockDomains = const [],
   })  : assert(javascriptMode != null),
         assert(initialMediaPlaybackPolicy != null),
         assert(allowsInlineMediaPlayback != null);
@@ -299,6 +300,9 @@ class WebView extends StatefulWidget {
   /// default [backgroundColor] is `null`.
   final Color? backgroundColor;
 
+  /// Customize for Mx
+  final List<String> contentBlockDomains;
+
   @override
   State<StatefulWidget> createState() => _WebViewState();
 }
@@ -372,6 +376,7 @@ CreationParams _creationParamsFromWidget(WebView widget) {
     autoMediaPlaybackPolicy: widget.initialMediaPlaybackPolicy,
     backgroundColor: widget.backgroundColor,
     cookies: widget.initialCookies,
+    contentBlockDomains: widget.contentBlockDomains,
   );
 }
 
@@ -630,6 +635,11 @@ class WebViewController {
   /// Reloads the current URL.
   Future<void> reload() {
     return _webViewPlatformController.reload();
+  }
+
+  /// Customize for Mx
+  Future<void> stopLoading() {
+    return _webViewPlatformController.stopLoading();
   }
 
   /// Clears all caches used by the [WebView].

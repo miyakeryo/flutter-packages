@@ -2411,6 +2411,28 @@ class WKWebViewHostApi {
     }
   }
 
+  Future<void> stopLoading(int arg_identifier) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.WKWebViewHostApi.stopLoading', codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_identifier]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<String?> getTitle(int arg_identifier) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.WKWebViewHostApi.getTitle', codec,
@@ -2501,6 +2523,31 @@ class WKWebViewHostApi {
       );
     } else {
       return replyList[0];
+    }
+  }
+
+  /// Customize for Mx
+  Future<void> setContentBlockDomains(
+      int arg_identifier, List<String> arg_contentBlockDomains) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.WKWebViewHostApi.setContentBlockDomains', codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_identifier, arg_contentBlockDomains])
+            as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
     }
   }
 }

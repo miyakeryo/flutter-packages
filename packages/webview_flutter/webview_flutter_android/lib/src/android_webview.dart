@@ -109,6 +109,10 @@ class WebView extends JavaObject {
   @visibleForTesting
   static WebViewHostApiImpl api = WebViewHostApiImpl();
 
+  /// Customize for Mx
+  static WebViewClientHostApiImpl clientHostApi = WebViewClientHostApiImpl();
+  late WebViewClient _webViewClient;
+
   /// The [WebSettings] object used to control the settings for this WebView.
   late final WebSettings settings = WebSettings(this);
 
@@ -264,6 +268,11 @@ class WebView extends JavaObject {
     return api.reloadFromInstance(this);
   }
 
+  /// Customize for Mx
+  Future<void> stopLoading() {
+    return api.stopLoadingFromInstance(this);
+  }
+
   /// Clears the resource cache.
   ///
   /// Note that the cache is per-application, so this will clear the cache for
@@ -336,6 +345,7 @@ class WebView extends JavaObject {
   ///
   /// This will replace the current handler.
   Future<void> setWebViewClient(WebViewClient webViewClient) {
+    _webViewClient = webViewClient;
     return api.setWebViewClientFromInstance(this, webViewClient);
   }
 
@@ -395,6 +405,11 @@ class WebView extends JavaObject {
   /// Sets the background color of this WebView.
   Future<void> setBackgroundColor(Color color) {
     return api.setBackgroundColorFromInstance(this, color.value);
+  }
+
+  /// Customize for Mx
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) {
+    return clientHostApi.setContentBlockDomainsFromInstance(_webViewClient, contentBlockDomains);
   }
 
   @override

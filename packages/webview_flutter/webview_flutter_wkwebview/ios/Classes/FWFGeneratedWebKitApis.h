@@ -735,6 +735,8 @@ NSObject<FlutterMessageCodec> *FWFWKWebViewHostApiGetCodec(void);
                                     error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)reloadWebViewWithIdentifier:(NSNumber *)identifier
                               error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)stopLoadingWebViewWithIdentifier:(NSNumber *)identifier
+                                   error:(FlutterError *_Nullable *_Nonnull)error;
 - (nullable NSString *)titleForWebViewWithIdentifier:(NSNumber *)identifier
                                                error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setAllowsBackForwardForWebViewWithIdentifier:(NSNumber *)identifier
@@ -743,6 +745,9 @@ NSObject<FlutterMessageCodec> *FWFWKWebViewHostApiGetCodec(void);
 - (void)setUserAgentForWebViewWithIdentifier:(NSNumber *)identifier
                                    userAgent:(nullable NSString *)userAgent
                                        error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setContentBlockDomainsForWebViewWithIdentifier:(NSNumber *)identifier
+                                   contentBlockDomains:(NSArray *)contentBlockDomains
+                                                 error:(FlutterError *_Nullable *_Nonnull)error;
 - (void)evaluateJavaScriptForWebViewWithIdentifier:(NSNumber *)identifier
                                   javaScriptString:(NSString *)javaScriptString
                                         completion:(void (^)(id _Nullable,

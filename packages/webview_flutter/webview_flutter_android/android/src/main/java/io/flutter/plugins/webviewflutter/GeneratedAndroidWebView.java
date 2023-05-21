@@ -801,6 +801,8 @@ public class GeneratedAndroidWebView {
 
     void reload(@NonNull Long instanceId);
 
+    void stopLoading(@NonNull Long instanceId);
+
     void clearCache(@NonNull Long instanceId, @NonNull Boolean includeDiskFiles);
 
     void evaluateJavascript(
@@ -1116,6 +1118,29 @@ public class GeneratedAndroidWebView {
                 Number instanceIdArg = (Number) args.get(0);
                 try {
                   api.reload((instanceIdArg == null) ? null : instanceIdArg.longValue());
+                  wrapped.add(0, null);
+                } catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.WebViewHostApi.stopLoading", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                Number instanceIdArg = (Number) args.get(0);
+                try {
+                  api.stopLoading((instanceIdArg == null) ? null : instanceIdArg.longValue());
                   wrapped.add(0, null);
                 } catch (Throwable exception) {
                   ArrayList<Object> wrappedError = wrapError(exception);
@@ -2074,6 +2099,8 @@ public class GeneratedAndroidWebView {
     void setSynchronousReturnValueForShouldOverrideUrlLoading(
         @NonNull Long instanceId, @NonNull Boolean value);
 
+    void setContentBlockDomains(Long instanceId, List<String> domains);
+
     /** The codec used by WebViewClientHostApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return new StandardMessageCodec();
@@ -2096,6 +2123,31 @@ public class GeneratedAndroidWebView {
                 Number instanceIdArg = (Number) args.get(0);
                 try {
                   api.create((instanceIdArg == null) ? null : instanceIdArg.longValue());
+                  wrapped.add(0, null);
+                } catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.WebViewClientHostApi.setContentBlockDomains", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                Number instanceIdArg = (Number) args.get(0);
+                List<String> contentBlockDomains = (List<String>) args.get(1);
+                try {
+                  api.setContentBlockDomains(
+                      (instanceIdArg == null) ? null : instanceIdArg.longValue(), contentBlockDomains);
                   wrapped.add(0, null);
                 } catch (Throwable exception) {
                   ArrayList<Object> wrappedError = wrapError(exception);
