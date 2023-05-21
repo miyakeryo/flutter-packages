@@ -360,6 +360,9 @@ class WebKitWebViewController extends PlatformWebViewController {
   Future<void> reload() => _webView.reload();
 
   @override
+  Future<void> stopLoading() => _webView.stopLoading();
+
+  @override
   Future<void> clearCache() {
     return _webView.configuration.websiteDataStore.removeDataOfTypes(
       <WKWebsiteDataType>{
@@ -461,6 +464,11 @@ class WebKitWebViewController extends PlatformWebViewController {
   @override
   Future<void> setUserAgent(String? userAgent) {
     return _webView.setCustomUserAgent(userAgent);
+  }
+
+  @override
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) {
+    return _webView.setContentBlockDomains(contentBlockDomains);
   }
 
   @override

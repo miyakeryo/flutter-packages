@@ -245,6 +245,11 @@ class WebViewHostApiImpl extends WebViewHostApi {
   }
 
   /// Helper method to convert instances ids to objects.
+  Future<void> stopLoadingFromInstance(WebView instance) {
+    return stopLoading(instanceManager.getIdentifier(instance)!);
+  }
+
+  /// Helper method to convert instances ids to objects.
   Future<void> clearCacheFromInstance(WebView instance, bool includeDiskFiles) {
     return clearCache(
       instanceManager.getIdentifier(instance)!,
@@ -603,6 +608,17 @@ class WebViewClientHostApiImpl extends WebViewClientHostApi {
     return setSynchronousReturnValueForShouldOverrideUrlLoading(
       instanceManager.getIdentifier(instance)!,
       value,
+    );
+  }
+
+  /// Helper method to convert instances ids to objects.
+  Future<void> setContentBlockDomainsFromInstance(
+    WebViewClient instance,
+    List<String> contentBlockDomains,
+  ) {
+    return setContentBlockDomains(
+      instanceManager.getIdentifier(instance)!,
+      contentBlockDomains,
     );
   }
 }

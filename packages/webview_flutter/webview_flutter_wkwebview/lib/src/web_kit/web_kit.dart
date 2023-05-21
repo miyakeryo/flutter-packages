@@ -1054,6 +1054,11 @@ class WKWebView extends UIView {
     return _webViewApi.reloadForInstances(this);
   }
 
+  /// Customize for Mx
+  Future<void> stopLoading() {
+    return _webViewApi.stopLoadingForInstances(this);
+  }
+
   /// The page title.
   ///
   /// Represents [WKWebView.title](https://developer.apple.com/documentation/webkit/wkwebview/1415015-title?language=objc).
@@ -1090,6 +1095,16 @@ class WKWebView extends UIView {
     return _webViewApi.evaluateJavaScriptForInstances(
       this,
       javaScriptString,
+    );
+  }
+
+  /// Customize for Mx
+  ///
+  /// Add [WKWebView.WKUserContentController.addContentRuleList](https://developer.apple.com/documentation/webkit/wkusercontentcontroller/2902756-addcontentrulelist?language=objc).
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) {
+    return _webViewApi.setContentBlockDomainsForInstances(
+      this,
+      contentBlockDomains,
     );
   }
 

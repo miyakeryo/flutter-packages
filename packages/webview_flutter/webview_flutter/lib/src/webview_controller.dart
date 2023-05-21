@@ -218,6 +218,11 @@ class WebViewController {
     return platform.reload();
   }
 
+  /// Customize for Mx
+  Future<void> stopLoading() {
+    return platform.stopLoading();
+  }
+
   /// Sets the [NavigationDelegate] containing the callback methods that are
   /// called during navigation events.
   Future<void> setNavigationDelegate(NavigationDelegate delegate) {
@@ -354,6 +359,11 @@ class WebViewController {
   /// Sets the value used for the HTTP `User-Agent:` request header.
   Future<void> setUserAgent(String? userAgent) {
     return platform.setUserAgent(userAgent);
+  }
+
+  /// Customize for Mx
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) {
+    return platform.setContentBlockDomains(contentBlockDomains);
   }
 }
 

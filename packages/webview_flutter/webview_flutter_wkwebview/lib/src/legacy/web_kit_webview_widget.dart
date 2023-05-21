@@ -234,6 +234,10 @@ class WebKitWebViewPlatformController extends WebViewPlatformController {
       webView.scrollView.setBackgroundColor(params.backgroundColor);
     }
 
+    if (params.contentBlockDomains.isNotEmpty) {
+      webView.setContentBlockDomains(params.contentBlockDomains);
+    }
+
     if (params.initialUrl != null) {
       await loadUrl(params.initialUrl!, null);
     }
@@ -336,6 +340,9 @@ class WebKitWebViewPlatformController extends WebViewPlatformController {
 
   @override
   Future<void> reload() => webView.reload();
+
+  @override
+  Future<void> stopLoading() => webView.stopLoading();
 
   @override
   Future<String> evaluateJavascript(String javascript) async {

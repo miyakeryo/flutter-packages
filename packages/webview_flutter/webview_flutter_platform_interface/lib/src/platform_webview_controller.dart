@@ -145,6 +145,12 @@ abstract class PlatformWebViewController extends PlatformInterface {
         'reload is not implemented on the current platform');
   }
 
+  /// Customize for Mx
+  Future<void> stopLoading() {
+    throw UnimplementedError(
+        'stopLoading is not implemented on the current platform');
+  }
+
   /// Clears all caches used by the [WebView].
   ///
   /// The following caches are cleared:
@@ -259,6 +265,12 @@ abstract class PlatformWebViewController extends PlatformInterface {
   Future<void> setUserAgent(String? userAgent) {
     throw UnimplementedError(
         'setUserAgent is not implemented on the current platform');
+  }
+
+  /// Customize for Mx
+  Future<void> setContentBlockDomains(List<String> contentBlockDomains) {
+    throw UnimplementedError(
+        'setContentBlockDomains is not implemented on the current platform');
   }
 
   /// Sets a callback that notifies the host application that web content is
